@@ -8,4 +8,10 @@ router
   .get(syllabusController.getAllSyllabus)
   .post(syllabusController.createSyllabus);
 
+router
+  .route('/:id')
+  .get(syllabusController.getSyllabus)
+  .patch(syllabusController.updateSyllabus)
+  .delete(syllabusController.deleteSyllabus);
+
 module.exports = router;

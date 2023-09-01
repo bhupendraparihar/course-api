@@ -18,7 +18,6 @@ exports.getAllSyllabus = catchAsync(async (req, res, next) => {
 });
 
 exports.createSyllabus = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   const newSyllabus = await Syllabus.create(req.body);
 
   res.status(201).json({
@@ -26,5 +25,56 @@ exports.createSyllabus = catchAsync(async (req, res, next) => {
     data: {
       syllabus: newSyllabus,
     },
+  });
+});
+
+exports.getSyllabus = catchAsync(async (req, res, next) => {
+  const syllabus = await Syllabus.findById(req.params.id);
+
+  if (!syllabus) {
+    return next(
+      new AppError(`No syllabus found with ID: ${req.params.id}`, 404)
+    );
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      syllabus,
+    },
+  });
+});
+
+exports.updateSyllabus = catchAsync(async (req, res, next) => {
+  const syllabus = await Syllabus.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
+
+  if (!syllabus) {
+    return next(
+      new AppError(`No syllabus found with ID: ${req.params.id}`, 404)
+    );
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      syllabus,
+    },
+  });
+});
+
+exports.deleteSyllabus = catchAsync(async (req, res, next) => {
+  const syllabus = await Syllabus.findByIdAndDelete(req.params.id);
+
+  if (!syllabus) {
+    return next(
+      new AppError(`No Syllabus found with ID: ${req.params.id}`, 404)
+    );
+  }
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
   });
 });
